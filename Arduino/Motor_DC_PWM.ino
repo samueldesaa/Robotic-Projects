@@ -24,6 +24,11 @@ public:
     digitalWrite(m2, LOW);
     analogWrite(p1, vel);  // Use analogWrite for PWM
   };
+
+  void para(){
+    digitalWrite(m1,LOW);
+    digitalWrite(m2,LOW);
+  }
 };
 
 void frente2(motor &m1, motor &m2, int vel) {
@@ -34,6 +39,10 @@ void frente2(motor &m1, motor &m2, int vel) {
 void atras2(motor &m1, motor &m2, int vel) {
   m1.atras(vel);
   m2.atras(vel);
+};
+void para2(motor &m1, motor &m2){
+  m1.para();
+  m2.para();
 };
 
 //Criação de classe para led RGB
@@ -95,13 +104,12 @@ public:
 };
 
 //Determinado as portas do led
-ledRGB led(14, 16, 15);
-
+ledRGB led(6, 8, 7);
 motor mt1(5, 4, 13);
 motor mt2(3, 2, 12);
-Ultrasonic direita(7, 6);
-Ultrasonic front(9, 8);
-Ultrasonic esquerda(11, 10);
+Ultrasonic right(24, 22);
+Ultrasonic front(26, 28);
+Ultrasonic left(11, 9);
 
 void setup() {
   // put your setup code here, to run once:
@@ -109,43 +117,19 @@ void setup() {
   randomSeed(analogRead(0));
   //Iniciar monitor serial
   Serial.begin(9600);
+  int f;
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  int fr = front.read();
-  if (fr > 200) {
-    frente2(mt1, mt2, 200);
+  int f = front.read();
+  Serial.println(f);
+  if(f>30){
     led.green();
-  } else if (fr > 100) {
-    frente2(mt1, mt2, 150);
-    led.color(132, 255, 0);
-  } else if (fr > 50) {
-    frente2(mt1, mt2, 70);
-    led.color(208, 255, 0);
-  } else if (fr > 20) {
-    frente2(mt1, mt2, 20);
-    led.color(255, 132, 0);
-  } else if (fr > 10) {
-    led.color(255, 72, 0);
-    while (fr < 250) {
-      fr = front.read();  // Update fr inside the loop
-      if (fr < 10) {
-        atras2(mt1, mt2, 20);
-        led.color(255, 72, 0);
-      } else if (fr < 20) {
-        atras2(mt1, mt2, 70);
-        led.color(255, 132, 0);
-      } else if (fr < 50) {
-        atras2(mt1, mt2, 150);
-        led.color(208, 255, 0);
-      } else if (fr < 100) {
-        atras2(mt1, mt2, 150);
-        led.color(132, 255, 0);
-      } else if (fr < 200) {
-        atras2(mt1, mt2, 200);
-        led.green();
-      }
-    }
+    frente2(mt1,mt2,150);
+  }else{
+    led.red();
+    para2(mt1,mt2);
   }
 }
