@@ -14,12 +14,14 @@ public:
   };
 
   void frente(int vel) {
+    vel = (int)(80+((vel%100)*1.75));
     digitalWrite(m1, LOW);
     digitalWrite(m2, HIGH);
     analogWrite(p1, vel);  // Use analogWrite for PWM
   };
 
   void atras(int vel) {
+    vel = (int)(80+((vel%100)*1.75));
     digitalWrite(m1, HIGH);
     digitalWrite(m2, LOW);
     analogWrite(p1, vel);  // Use analogWrite for PWM
@@ -31,19 +33,6 @@ public:
   }
 };
 
-void frente2(motor &m1, motor &m2, int vel) {
-  m1.frente(vel);
-  m2.frente(vel);
-};
-
-void atras2(motor &m1, motor &m2, int vel) {
-  m1.atras(vel);
-  m2.atras(vel);
-};
-void para2(motor &m1, motor &m2){
-  m1.para();
-  m2.para();
-};
 
 //Criação de classe para led RGB
 class ledRGB {
@@ -104,12 +93,12 @@ public:
 };
 
 //Determinado as portas do led
-ledRGB led(6, 8, 7);
-motor mt1(5, 4, 13);
-motor mt2(3, 2, 12);
+ledRGB led(3, 2, 4);
+motor mt1(7, 6, 5);
+motor mt2(8, 9, 10);
 Ultrasonic right(24, 22);
-Ultrasonic front(26, 28);
-Ultrasonic left(11, 9);
+Ultrasonic front(28, 26);
+Ultrasonic left(30, 32);
 
 void setup() {
   // put your setup code here, to run once:
@@ -117,19 +106,41 @@ void setup() {
   randomSeed(analogRead(0));
   //Iniciar monitor serial
   Serial.begin(9600);
-  int f;
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   int f = front.read();
-  Serial.println(f);
-  if(f>30){
+  int l = left.read();
+  int r = right.read();
+  if(f>100){
     led.green();
-    frente2(mt1,mt2,150);
+    frente2(70);
+  }else if(f>50){
+    led.color(255,255,0);
+    frente2(40);
   }else{
     led.red();
-    para2(mt1,mt2);
+    atras2(20);
+    delay(2000);
+    mt1.frente(20);
+    delay(2000);
+    mt2.atras(20);
+    delay(2000);
   }
 }
+
+void frente2(int vel) {
+  mt1.frente(vel);
+  mt2.frente(vel);
+}
+
+void atras2(int vel) {
+  mt1.atras(vel);
+  mt2.atras(vel);
+};
+void para2(){
+  mt1.para();
+  mt2.para();
+};
