@@ -92,6 +92,7 @@ public:
   }
 };
 
+
 //Determinado as portas do led
 ledRGB led(3, 2, 4);
 motor mt1(7, 6, 5);
@@ -114,21 +115,73 @@ void loop() {
   int f = front.read();
   int l = left.read();
   int r = right.read();
-  if(f>100){
-    led.green();
-    frente2(70);
-  }else if(f>50){
-    led.color(255,255,0);
-    frente2(40);
-  }else{
-    led.red();
-    atras2(20);
-    delay(2000);
-    mt1.frente(20);
-    delay(2000);
-    mt2.atras(20);
-    delay(2000);
-  }
+  //IMPRIMIR ENTRADAS ULTRASONICO
+  // Serial.print(r);
+  // Serial.print(", ");
+  // Serial.print(f);
+  // Serial.print(", ");
+  // Serial.print(l);
+  // Serial.println();
+
+  //TESTE LED
+  // led.ramdColor();
+  // delay(200);
+
+  //PARA NA PAREDE E DÁ MEIA VOLTA
+  // if(f>50){
+  //   led.green();
+  //   frente2(70);
+  // }else if(f>20){
+  //   led.color(255,255,0);
+  //   frente2(40);
+  // }else{
+  //   led.red();
+  //   atras2(20,500);
+  //   direita2(10, 10,500);
+  // }
+
+  //TESTE GIROS
+  // led.green();
+  // direita2(100,0,500);
+  // led.red();
+  // delay(2000);
+  
+}
+
+void direita2(int vel, int vel2, int del){
+  mt1.frente(vel);
+  mt2.atras(vel2);
+  delay(del);
+  para2();
+}
+void esquerda2(int vel, int vel2, int del){
+  mt1.atras(vel);
+  mt2.frente(vel2);
+  delay(del);
+  para2();
+}
+
+void frente2(int vel, int del) {
+  mt1.frente(vel);
+  mt2.frente(vel);
+  delay(del);
+  para2();
+}
+
+void atras2(int vel, int del) {
+  mt1.atras(vel);
+  mt2.atras(vel);
+  delay(del);
+  para2();
+};
+
+void direita2(int vel, int vel2){
+  mt1.frente(vel);
+  mt2.atras(vel);
+}
+void esquerda2(int vel, int vel2){
+  mt1.atras(vel);
+  mt2.frente(vel);
 }
 
 void frente2(int vel) {
