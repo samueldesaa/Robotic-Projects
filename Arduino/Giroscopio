@@ -1,0 +1,67 @@
+#include <Wire.h>
+
+const int MPU = 0x68; // Endereço I2C do MPU6050
+
+int acelX, acelY, acelZ, temperatura, giroX, giroY, giroZ;
+float anguloX = 0.0; // Ângulo acumulado no eixo X
+float anguloY = 0.0; // Ângulo acumulado no eixo Y
+float anguloZ = 0.0; // Ângulo acumulado no eixo Z
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+  
+  Wire.beginTransmission(MPU);
+  Wire.write(0x6B); // Registrador PWR_MGMT_1
+  Wire.write(0);    // Acorda o MPU-6050
+  Wire.endTransmission(true);
+}
+
+void loop() {
+  Wire.beginTransmission(MPU);
+  Wire.write(0x3B); // Endereço do registrador ACCEL_XOUT_H
+  Wire.endTransmission(false);
+  
+  Wire.requestFrom(MPU, 14, true);
+  
+  acelX = Wire.read() << 8 | Wire.read();
+  acelY = Wire.read() << 8 | Wire.read();
+  acelZ = Wire.read() << 8 | Wire.read();
+  temperatura = Wire.read() << 8 | Wire.read();
+  giroX = Wire.read() << 8 | Wire.read();
+  giroY = Wire.read() << 8 | Wire.read();
+  giroZ = Wire.read() << 8 | Wire.read();
+  
+  // Calcula os ângulos de rotação em graus nos eixos X, Y e Z
+  // Sensibilidade do giroscópio MPU-6050: ±250 °/s => 131 LSB/°/s
+  float taxaGiroX = giroX / 131.0; // Converte de LSB para °/s
+  float taxaGiroY = giroY / 131.0; // Converte de LSB para °/s
+  float taxaGiroZ = giroZ / 131.0; // Converte de LSB para °/s
+  
+  float tempoPassado = 0.5; // Tempo passado em segundos (500ms = 0.5s)
+  
+  float deltaAnguloX = taxaGiroX * tempoPassado; // Calcula o incremento do ângulo no eixo X
+  float deltaAnguloY = taxaGiroY * tempoPassado; // Calcula o incremento do ângulo no eixo Y
+  float deltaAnguloZ = taxaGiroZ * tempoPassado; // Calcula o incremento do ângulo no eixo Z
+  
+  anguloX += deltaAnguloX; // Atualiza o ângulo acumulado no eixo X
+  anguloY += deltaAnguloY; // Atualiza o ângulo acumulado no eixo Y
+  anguloZ += deltaAnguloZ; // Atualiza o ângulo acumulado no eixo Z
+  
+  // Mostra os dados
+  Serial.print("Acel:"); 
+  Serial.print("  X:"); Serial.print(acelX);
+  Serial.print("\tY:"); Serial.print(acelY);
+  Serial.print("\tZ:"); Serial.print(acelZ);
+  
+  Serial.print("\tGiro:");
+  Serial.print("  X:"); Serial.print(giroX);
+  Serial.print("\tY:"); Serial.print(giroY);
+  Serial.print("\tZ:"); Serial.print(giroZ);
+  
+  Serial.print("\tÂngulo X: "); Serial.print(anguloX);
+  Serial.print("\tÂngulo Y: "); Serial.print(anguloY);
+  Serial.print("\tÂngulo Z: "); Serial.println(anguloZ);
+  
+  delay(500);
+}
