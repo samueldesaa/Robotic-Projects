@@ -14,8 +14,20 @@ public:
   };
 
   void frente(int vel) {
-    if(vel>0){
-    vel = (int)(79 + ((vel % 100) * 1.75));
+    if(vel==1){
+      vel = 45;
+    }
+    if(vel==2){
+      vel = 90;
+    }
+    if(vel==3){
+      vel = 170;
+    }
+    if(vel==4){
+      vel = 200;
+    }
+    if(vel==5){
+      vel = 255;
     }
     digitalWrite(m1, LOW);
     digitalWrite(m2, HIGH);
@@ -23,8 +35,20 @@ public:
   };
 
   void atras(int vel) {
-    if(vel>0){
-    vel = (int)(79 + ((vel % 100) * 1.75));
+    if(vel==1){
+      vel = 45;
+    }
+    if(vel==2){
+      vel = 90;
+    }
+    if(vel==3){
+      vel = 170;
+    }
+    if(vel==4){
+      vel = 200;
+    }
+    if(vel==5){
+      vel = 255;
     }
     digitalWrite(m1, HIGH);
     digitalWrite(m2, LOW);
@@ -96,7 +120,6 @@ public:
   }
 };
 
-
 //Determinado as portas do led
 ledRGB led(3, 2, 4);
 motor mt1(9, 8, 10);
@@ -131,29 +154,44 @@ void loop() {
   // delay(200);
 
   //PARA NA PAREDE E DÁ MEIA VOLTA
-  if(f>120){
-    led.white();
-    frente2(100);
-  }
-  else if (f > 70) {
-    led.blue();
-    frente2(70);
-  } else if (f > 15) {
+  // if(f>120){
+  //   led.white();
+  //   frente2(100);
+  // }
+  // else if (f > 70) {
+  //   led.blue();
+  //   frente2(70);
+  // } else if (f > 15) {
+  //   led.green();
+  //   frente2(20);
+  // } else {
+  //   if (l < 50) {
+  //     led.color(255, 255, 0);
+  //     direita2(5, 5,  700);
+  //     atras2(20, 500);
+  //   } else if (r < 50) {
+  //     led.color(255, 255, 0);
+  //     esquerda2(5,5,700);
+  //   }else{
+  //     led.red();
+  //     atras2(20,500);
+  //     direita2(5, 5,  1000);
+  //   }
+  // }
+
+  //DESACELERAR
+  float veloc;
+  if(f>100){
+    frente2(5);
     led.green();
-    frente2(20);
-  } else {
-    if (l < 50) {
-      led.color(255, 255, 0);
-      direita2(5, 5,  700);
-      atras2(20, 500);
-    } else if (r < 50) {
-      led.color(255, 255, 0);
-      esquerda2(5,5,700);
-    }else{
-      led.red();
-      atras2(20,500);
-      direita2(5, 5,  1000);
-    }
+  }
+  else if(f>35){
+    led.color(255,255,0);
+    frente2(2);
+  }else{
+    led.red();
+    para2();
+    Serial.println("para");
   }
 
   //SEGUE PAREDE
