@@ -149,6 +149,14 @@ void loop() {
   // Serial.print(l);
   // Serial.println();
 
+  //GIRO
+  led.green();
+  int velo = 150;
+  atras2(velo,500);
+  direita2(velo,0,600);
+  // esquerda2(3,3,200);
+  led.red();
+  delay(5000);
   //TESTE LED
   // led.ramdColor();
   // delay(200);
@@ -180,33 +188,32 @@ void loop() {
   // }
 
   //DESACELERAR
-  float veloc;
-  if(f>100){
-    frente2(5);
-    led.green();
-  }
-  else if(f>35){
-    led.color(255,255,0);
-    frente2(2);
-  }else{
-    led.red();
-    para2();
-    Serial.println("para");
-  }
-
-  //SEGUE PAREDE
-  // int dist = 6;
-  // int tol = 3;
-  // if(r<dist){
-  //   led.blue();
-  //   frente2(5,15,700);
-  // }else if(r>dist){
-  //   led.red();
-  //   frente2(15,1,700);
-  // }else{
-  //   frente2(10);
+  // float veloc;
+  // if(f>100){
+  //   frente2(5);
   //   led.green();
   // }
+  // else if(f>35){
+  //   led.color(255,255,0);
+  //   frente2(2);
+  // }else{
+  //   led.red();
+  //   para2();
+  //   Serial.println("para");
+  // }
+
+  //SEGUE PAREDE
+  int dist = 6;
+  int tol = 3;
+  if(r<5){
+    esquerda2(3,3,200);
+    frente2(500);
+  }else if(l<5){
+    direita2(3,3,200);
+    frente2(500);
+  }else{
+    frente2(3);
+  }
 
   //TESTE GIROS
   // led.green();
@@ -268,7 +275,11 @@ void frente2(int vel) {
   mt1.frente(vel);
   mt2.frente(vel);
 }
-
+void para2(int del) {
+  mt1.para();
+  mt2.para();
+  delay(del);
+};
 void atras2(int vel) {
   mt1.atras(vel);
   mt2.atras(vel);
