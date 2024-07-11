@@ -14,19 +14,19 @@ public:
   };
 
   void frente(int vel) {
-    if(vel==1){
+    if (vel == 1) {
       vel = 45;
     }
-    if(vel==2){
+    if (vel == 2) {
       vel = 90;
     }
-    if(vel==3){
+    if (vel == 3) {
       vel = 170;
     }
-    if(vel==4){
+    if (vel == 4) {
       vel = 200;
     }
-    if(vel==5){
+    if (vel == 5) {
       vel = 255;
     }
     digitalWrite(m1, LOW);
@@ -34,26 +34,35 @@ public:
     analogWrite(p1, vel);  // Use analogWrite for PWM
   };
 
+  void frente(int vel, int del){
+    frente(vel);
+    delay(del);
+  }
+
   void atras(int vel) {
-    if(vel==1){
+    if (vel == 1) {
       vel = 45;
     }
-    if(vel==2){
+    if (vel == 2) {
       vel = 90;
     }
-    if(vel==3){
+    if (vel == 3) {
       vel = 170;
     }
-    if(vel==4){
+    if (vel == 4) {
       vel = 200;
     }
-    if(vel==5){
+    if (vel == 5) {
       vel = 255;
     }
     digitalWrite(m1, HIGH);
     digitalWrite(m2, LOW);
     analogWrite(p1, vel);  // Use analogWrite for PWM
   };
+  void atras(int vel, int del){
+    atras(vel);
+    delay(del);
+  }
 
   void para() {
     digitalWrite(m1, LOW);
@@ -150,13 +159,14 @@ void loop() {
   // Serial.println();
 
   //GIRO
-  led.green();
-  int velo = 150;
-  atras2(velo,500);
-  direita2(velo,0,600);
-  // esquerda2(3,3,200);
-  led.red();
-  delay(5000);
+  // led.green();
+  // int velo = 150;
+  // atras2(velo,500);
+  // direita2(velo,0,600);
+  // // esquerda2(3,3,200);
+  // led.red();
+  // delay(5000);
+
   //TESTE LED
   // led.ramdColor();
   // delay(200);
@@ -203,16 +213,37 @@ void loop() {
   // }
 
   //SEGUE PAREDE
-  int dist = 6;
-  int tol = 3;
-  if(r<5){
-    esquerda2(3,3,200);
-    frente2(500);
-  }else if(l<5){
-    direita2(3,3,200);
-    frente2(500);
-  }else{
-    frente2(3);
+  int dist = 8;
+  int v = 150;
+  if (f < dist+5) {
+    led.color(142, 3, 252);
+    atras2(500);
+    if (r > 15) {
+      direita2(v, v, 200);
+    } else if (l > 15) {
+      esquerda2(v, v, 200);
+    } else if (r > 30 && l > 30) {
+      led.color(255, 255, 0);
+    } else {
+      direita2(v, v, 400);
+    }
+  } else if (r < dist) {
+    led.green();
+    frente2(0,v,200);
+    frente2(v,500);
+    // }else if(r>dist+5){
+    //   frente2(3,200);
+    //   direita2(3,3,200);
+  } else if (l < dist) {
+    led.red();
+    frente2(v,0,200);
+    frente2(v,500);
+    // }else if(l>dist+5){
+    //   frente2(3,200);
+    //   esquerda2(3,3,200);
+  } else {
+    led.white();
+    frente2(v);
   }
 
   //TESTE GIROS
