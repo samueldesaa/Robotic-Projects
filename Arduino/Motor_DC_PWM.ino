@@ -3,6 +3,7 @@
 class motor {
 private:
   int m1, m2, p1;
+  float diminuicao = 0.22;
 public:
   motor(int M1, int M2, int P1) {
     m1 = M1;
@@ -29,10 +30,11 @@ public:
     if (vel == 5) {
       vel = 255;
     }
-    // if( p1 == 7){
-    //   Serial.println("É o motor forte");
-    //   vel-=80;
-    // }
+    //Se necessário diminuição de velocidade em um dos motores
+    if (p1 == 2) {
+      Serial.println("É o motor forte");
+      vel -= vel * diminuicao;
+    }
     digitalWrite(m1, LOW);
     digitalWrite(m2, HIGH);
     analogWrite(p1, vel);  // Use analogWrite for PWM
@@ -60,10 +62,11 @@ public:
     if (vel == 5) {
       vel = 255;
     }
-    // if( p1 == 7){
-    //   Serial.println("É o motor forte");
-    //   vel-=80;
-    // }
+    //Se necessário diminuição de velocidade em um dos motores
+    if (p1 == 2) {
+      Serial.println("É o motor forte");
+      vel -= vel * diminuicao;
+    }
     digitalWrite(m1, HIGH);
     digitalWrite(m2, LOW);
     analogWrite(p1, vel);  // Use analogWrite for PWM
@@ -140,15 +143,17 @@ public:
 };
 
 //Determinado as portas do led
-ledRGB led(3, 4, 2);
-motor mt1(8, 7, 5);
-motor mt2(9, 10, 6);
+// ledRGB led(3, 4, 2);
+int botao = 53;
+motor mt1(7, 6, 3);
+motor mt2(5, 4, 2);
 Ultrasonic right(24, 22);
 Ultrasonic left(26, 28);
 Ultrasonic front(32, 30);
 
 void setup() {
-  // put your setup code here, to run once:
+  //configurando o botão
+  pinMode(botao, INPUT_PULLUP);
   //semente do ramdom para maior diversidade de cores
   randomSeed(analogRead(0));
   //Iniciar monitor serial
@@ -156,97 +161,111 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  int f = front.read();
-  int l = left.read();
-  int r = right.read();
+  if (digitalRead(botao) == LOW) {
+    delay(2000);
+    while (true) {
+      // put your main code here, to run repeatedly:
+      int f = front.read();
+      int l = left.read();
+      int r = right.read();
 
-  //IMPRIMIR ENTRADAS ULTRASONICO
-  // Serial.print(r);
-  // Serial.print(", ");
-  // Serial.print(f);
-  // Serial.print(", ");
-  // Serial.print(l);
-  // Serial.println();
 
-  //TESTE LED
-  // led.blue();
-  // delay(200);
+      //IMPRIMIR ENTRADAS ULTRASONICO
+      // Serial.print(r);
+      // Serial.print(", ");
+      // Serial.print(f);
+      // Serial.print(", ");
+      // Serial.print(l);
+      // Serial.println();
 
-  //TESTE MOTOR
-  // mt1.frente(3);
-  // mt2.frente(3);
-  frente2(3);
+      //TESTE LED
+      // led.blue();
+      // delay(200);
 
-  //GIRO
-  // led.green();
-  // int velo = 2;
-  // direita2(velo,velo,900);
-  // led.red();
-  // delay(5000);
+      //TESTE MOTOR
+      // mt1.frente(3);
+      // mt2.frente(3);
+      frente2(2);
+      while (true) {
+        f = front.read();
+        if (f < 20 || digitalRead(botao) == LOW) {
+          direita2(2, 2, 1000);
+          break;
+        }
+      }
+      break;
 
-  //PARA NA PAREDE E DÁ MEIA VOLTA
-  // if( f > 20){
-  //   led.green();
-  //   frente2(5);
-  //   while(f>20){
-  //     f = front.read();
-  //   }
-  // }else{
-  //   led.red();
-  //   para2();
-  //   rotDireita();
-  //   while(true);
-  // }
+      //GIRO
+      // led.green();
+      // int velo = 2;
+      // direita2(velo,velo,900);
+      // led.red();
+      // delay(5000);
 
-  //DESACELERAR
-  // float veloc;
-  // if(f>100){
-  //   frente2(5);
-  //   led.green();
-  // }
-  // else if(f>35){
-  //   led.color(255,255,0);
-  //   frente2(2);
-  // }else{
-  //   led.red();
-  //   para2();
-  //   Serial.println("para");
-  // }
+      //PARA NA PAREDE E DÁ MEIA VOLTA
+      // if( f > 20){
+      //   led.green();
+      //   frente2(5);
+      //   while(f>20){
+      //     f = front.read();
+      //   }
+      // }else{
+      //   led.red();
+      //   para2();
+      //   rotDireita();
+      //   while(true);
+      // }
 
-  //SEGUE PAREDE
-  // int dist = 8;
-  // int v = 150;
-  // if (f < dist+5) {
-  //   led.color(142, 3, 252);
-  //   atras2(500);
-  //   if (r > 15) {
-  //     direita2(v, v, 200);
-  //   } else if (l > 15) {
-  //     esquerda2(v, v, 200);
-  //   } else if (r > 30 && l > 30) {
-  //     led.color(255, 255, 0);
-  //   } else {
-  //     direita2(v, v, 400);
-  //   }
-  // } else if (r < dist) {
-  //   led.green();
-  //   frente2(0,v,200);
-  //   frente2(v,500);
-  //   // }else if(r>dist+5){
-  //   //   frente2(3,200);
-  //   //   direita2(3,3,200);
-  // } else if (l < dist) {
-  //   led.red();
-  //   frente2(v,0,200);
-  //   frente2(v,500);
-  //   // }else if(l>dist+5){
-  //   //   frente2(3,200);
-  //   //   esquerda2(3,3,200);
-  // } else {
-  //   led.white();
-  //   frente2(v);
-  // }
+      //DESACELERAR
+      // float veloc;
+      // if(f>100){
+      //   frente2(5);
+      //   led.green();
+      // }
+      // else if(f>35){
+      //   led.color(255,255,0);
+      //   frente2(2);
+      // }else{
+      //   led.red();
+      //   para2();
+      //   Serial.println("para");
+      // }
+
+      //SEGUE PAREDE
+      // int dist = 8;
+      // int v = 150;
+      // if (f < dist+5) {
+      //   led.color(142, 3, 252);
+      //   atras2(500);
+      //   if (r > 15) {
+      //     direita2(v, v, 200);
+      //   } else if (l > 15) {
+      //     esquerda2(v, v, 200);
+      //   } else if (r > 30 && l > 30) {
+      //     led.color(255, 255, 0);
+      //   } else {
+      //     direita2(v, v, 400);
+      //   }
+      // } else if (r < dist) {
+      //   led.green();
+      //   frente2(0,v,200);
+      //   frente2(v,500);
+      //   // }else if(r>dist+5){
+      //   //   frente2(3,200);
+      //   //   direita2(3,3,200);
+      // } else if (l < dist) {
+      //   led.red();
+      //   frente2(v,0,200);
+      //   frente2(v,500);
+      //   // }else if(l>dist+5){
+      //   //   frente2(3,200);
+      //   //   esquerda2(3,3,200);
+      // } else {
+      //   led.white();
+      //   frente2(v);
+      // }
+    }
+  }
 }
 
 void rotDireita() {
