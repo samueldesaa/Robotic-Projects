@@ -8,7 +8,7 @@ class ledRGB {
   int R, G, B;
 
 public:
-//Construtor do LED
+  //Construtor do LED
   ledRGB(int r, int g, int b) {
     R = r;
     G = g;
@@ -30,7 +30,7 @@ public:
     analogWrite(B, b);
   }
   //Função de ligar todas as cores
-  void OnALL() {
+  void white() {
     digitalWrite(R, HIGH);
     digitalWrite(G, HIGH);
     digitalWrite(B, HIGH);
