@@ -3,7 +3,7 @@
 class motor {
 private:
   int m1, m2, p1;
-  float diminuicao = 0.22;
+  float diminuicao = 0.36;
 public:
   motor(int M1, int M2, int P1) {
     m1 = M1;
@@ -84,64 +84,7 @@ public:
 };
 
 
-//Criação de classe para led RGB
-class ledRGB {
-  int R, G, B;
-
-public:
-  //Construtor do LED
-  ledRGB(int r, int g, int b) {
-    R = r;
-    G = g;
-    B = b;
-    pinMode(R, OUTPUT);
-    pinMode(G, OUTPUT);
-    pinMode(B, OUTPUT);
-  }
-  //Função de cor aleatória
-  void ramdColor() {
-    analogWrite(R, random(256));
-    analogWrite(G, random(256));
-    analogWrite(B, random(256));
-  }
-  //Função de escolher cor específica
-  void color(int r, int g, int b) {
-    analogWrite(R, r);
-    analogWrite(G, g);
-    analogWrite(B, b);
-  }
-  //Função de ligar todas as cores
-  void white() {
-    digitalWrite(R, HIGH);
-    digitalWrite(G, HIGH);
-    digitalWrite(B, HIGH);
-  }
-  //Led vermelho
-  void red() {
-    digitalWrite(R, HIGH);
-    digitalWrite(G, LOW);
-    digitalWrite(B, LOW);
-  }
-  //Led verde
-  void green() {
-    digitalWrite(R, LOW);
-    digitalWrite(G, HIGH);
-    digitalWrite(B, LOW);
-  }
-  //Led azul
-  void blue() {
-    digitalWrite(R, LOW);
-    digitalWrite(G, LOW);
-    digitalWrite(B, HIGH);
-  }
-  //Desligar
-  void off() {
-    digitalWrite(R, LOW);
-    digitalWrite(G, LOW);
-    digitalWrite(B, LOW);
-  }
-};
-
+int f, r, l;
 //Determinado as portas do led
 // ledRGB led(3, 4, 2);
 int botao = 53;
@@ -165,9 +108,10 @@ void loop() {
     delay(2000);
     while (true) {
       // put your main code here, to run repeatedly:
-      int f = front.read();
-      int l = left.read();
-      int r = right.read();
+      //Leitura de ULTRASONICOS
+      f = front.read();
+      l = left.read();
+      r = right.read();
 
 
       //IMPRIMIR ENTRADAS ULTRASONICO
@@ -185,94 +129,85 @@ void loop() {
       //TESTE MOTOR
       // mt1.frente(3);
       // mt2.frente(3);
-      frente2(2);
-      while (true) {
-        f = front.read();
-        if (f < 20 || digitalRead(botao) == LOW) {
-          direita2(2, 2, 1000);
-          break;
-        }
-      }
-      break;
+
+      //Frente e PARA
+      // frente2(4);
+      // while (true) {
+      //   f = front.read();
+      //   if (f < 20 || digitalRead(botao) == LOW) {
+      //     direita2(2, 2, 600);
+      //     break;
+      //   }
+      // }
+      // break;
 
       //GIRO
       // led.green();
       // int velo = 2;
-      // direita2(velo,velo,900);
+      // direita2(velo,velo,820);
+      // rotDireita();
+      // break;
       // led.red();
       // delay(5000);
 
       //PARA NA PAREDE E DÁ MEIA VOLTA
       // if( f > 20){
-      //   led.green();
-      //   frente2(5);
+      //   frente2(2);
       //   while(f>20){
       //     f = front.read();
       //   }
       // }else{
-      //   led.red();
       //   para2();
       //   rotDireita();
-      //   while(true);
       // }
 
-      //DESACELERAR
-      // float veloc;
-      // if(f>100){
-      //   frente2(5);
-      //   led.green();
-      // }
-      // else if(f>35){
-      //   led.color(255,255,0);
-      //   frente2(2);
-      // }else{
-      //   led.red();
-      //   para2();
-      //   Serial.println("para");
-      // }
+      //Graus
+      rotacao();
 
       //SEGUE PAREDE
-      // int dist = 8;
-      // int v = 150;
-      // if (f < dist+5) {
-      //   led.color(142, 3, 252);
-      //   atras2(500);
-      //   if (r > 15) {
-      //     direita2(v, v, 200);
-      //   } else if (l > 15) {
-      //     esquerda2(v, v, 200);
-      //   } else if (r > 30 && l > 30) {
-      //     led.color(255, 255, 0);
-      //   } else {
-      //     direita2(v, v, 400);
-      //   }
-      // } else if (r < dist) {
-      //   led.green();
-      //   frente2(0,v,200);
-      //   frente2(v,500);
-      //   // }else if(r>dist+5){
-      //   //   frente2(3,200);
-      //   //   direita2(3,3,200);
-      // } else if (l < dist) {
-      //   led.red();
-      //   frente2(v,0,200);
-      //   frente2(v,500);
-      //   // }else if(l>dist+5){
-      //   //   frente2(3,200);
-      //   //   esquerda2(3,3,200);
+      // if (f < 15) {
+      //   verificaCantos();
+      //   frente2(100, 500);
+      // } else if (l < 6) {
+      //   frente2(150, 110, 1000);
+      // } else if (r < 6) {
+      //   frente2(110, 150, 1000);
+      // } else if (r > 70 && l > 70 && f > 70) {
+      //   break;
       // } else {
-      //   led.white();
-      //   frente2(v);
+      //   frente2(100);
       // }
     }
   }
 }
 
+void rotacao() {
+  while (f < 30) {
+    l = left.read(), r = right.read() , f = front.read();
+    esquerda2(70,70);
+  }
+  para2();
+}
+
+void verificaCantos() {
+  if (l < 15 && r < 15) {
+    rotDireita();
+    para2(200);
+    rotDireita();
+  } else if (l < 15) {
+    rotDireita();
+  } else if (r < 15) {
+    rotEsquerda();
+  } else {
+    rotEsquerda();
+  }
+}
+
 void rotDireita() {
-  direita2(2, 2, 1000);
+  direita2(2, 2, 950);
 }
 void rotEsquerda() {
-  esquerda2(2, 2, 1000);
+  esquerda2(2, 2, 950);
 }
 
 void direita2(int vel, int vel2, int del) {
@@ -289,8 +224,8 @@ void esquerda2(int vel, int vel2, int del) {
 }
 
 void frente2(int vel, int vel2, int del) {
-  mt1.frente(vel);
   mt2.frente(vel2);
+  mt1.frente(vel);
   delay(del);
   para2();
 }
@@ -302,8 +237,8 @@ void atras2(int vel, int vel2, int del) {
   para2();
 };
 void frente2(int vel, int del) {
-  mt1.frente(vel);
   mt2.frente(vel);
+  mt1.frente(vel);
   delay(del);
   para2();
 }
@@ -325,8 +260,8 @@ void esquerda2(int vel, int vel2) {
 }
 
 void frente2(int vel) {
-  mt1.frente(vel);
   mt2.frente(vel);
+  mt1.frente(vel);
 }
 void para2(int del) {
   mt1.para();
