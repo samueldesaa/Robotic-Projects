@@ -89,6 +89,7 @@ public:
 
 
 int f, r, l;
+int prioridade;
 //Determinado as portas do led
 // ledRGB led(3, 4, 2);
 int botao = 53;
@@ -119,11 +120,11 @@ void loop() {
 
 
       //IMPRIMIR ENTRADAS ULTRASONICO
-      // Serial.print(r);
+      // Serial.print(l);
       // Serial.print(", ");
       // Serial.print(f);
       // Serial.print(", ");
-      // Serial.print(l);
+      // Serial.print(r);
       // Serial.println();
 
       //TESTE LED
@@ -168,43 +169,46 @@ void loop() {
       //verificaCantos();
 
       //Giro
-       int x = l;
-       esquerda2(2, 2);
-       while (f < x - 5) {
-         f = front.read();
-       }
-       para2();
-       break;
+      //  int x = left.read();
+      //  esquerda2(2, 2);
+      //  while (f < x+5) {
+      //    f = front.read();
+      //  }
+      //  esquerda2(2,2,200);
+      //  para2();
+      //  break;
 
       //SEGUE PAREDE
-      // if (f < 15) {
-      //   verificaCantos();
-      //   frente2(100, 500);
-      // } else if (l < 6) {
-      //   frente2(150, 110, 1000);
-      // } else if (r < 6) {
-      //   frente2(110, 150, 1000);
-      // } else if (r > 70 && l > 70 && f > 70) {
-      //   break;
-      // } else {
-      //   frente2(100);
-      // }
+      if (f < 15) {
+        para2();
+        if (l < 20 && r < 20) {
+          while (true) {
+            direita2(2, 2, 200);
+            esquerda2(2, 2, 200);
+          }
+        } else if (l > 20) {
+          rotEsquerda();
+          frente2(2, 200);
+          prioridade = 2;
+        } else if (r < 20) {
+          rotDireita();
+          frente2(2, 200);
+          prioridade = 1;
+        }
+      } else if (l < 8 && prioridade == 1) {
+        frente2(150, 110, 1000);
+      } else if (r < 8 && prioridade == 1) {
+        frente2(110, 150, 1000);
+      } else if (r < 8) {
+        frente2(110, 150, 1000);
+      } else if (l < 8) {
+        frente2(150, 110, 1000);
+      } else if (r > 70 && l > 70 && f > 70) {
+        break;
+      } else {
+        frente2(100);
+      }
     }
-  }
-}
-
-
-void verificaCantos() {
-  if (l < 15 && r < 15) {
-    rotDireita();
-    para2(210);
-    rotDireita();
-  } else if (l < 15) {
-    rotDireita();
-  } else if (r < 15) {
-    rotEsquerda();
-  } else {
-    rotEsquerda();
   }
 }
 
