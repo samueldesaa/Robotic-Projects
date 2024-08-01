@@ -34,6 +34,8 @@ public:
     if (p1 == 2) {
       Serial.println("É o motor forte");
       vel -= vel * diminuicao;
+      Serial.print("Velocidade a ");
+      Serial.println(vel);
     }
     digitalWrite(m1, LOW);
     digitalWrite(m2, HIGH);
@@ -66,6 +68,8 @@ public:
     if (p1 == 2) {
       Serial.println("É o motor forte");
       vel -= vel * diminuicao;
+      Serial.print("Velocidade a ");
+      Serial.println(vel);
     }
     digitalWrite(m1, HIGH);
     digitalWrite(m2, LOW);
@@ -127,8 +131,9 @@ void loop() {
       // delay(200);
 
       //TESTE MOTOR
-      // mt1.frente(3);
-      // mt2.frente(3);
+      // int vel = 200;
+      // mt1.frente(vel);
+      // mt2.frente(vel);
 
       //Frente e PARA
       // frente2(4);
@@ -142,13 +147,9 @@ void loop() {
       // break;
 
       //GIRO
-      // led.green();
       // int velo = 2;
       // direita2(velo,velo,820);
-      // rotDireita();
       // break;
-      // led.red();
-      // delay(5000);
 
       //PARA NA PAREDE E DÁ MEIA VOLTA
       // if( f > 20){
@@ -164,9 +165,16 @@ void loop() {
       //Graus
       //rotacao();
 
-      frente2(100, 500);
       //verificaCantos();
-      rotacao();
+
+      //Giro
+       int x = l;
+       esquerda2(2, 2);
+       while (f < x - 5) {
+         f = front.read();
+       }
+       para2();
+       break;
 
       //SEGUE PAREDE
       // if (f < 15) {
@@ -185,13 +193,6 @@ void loop() {
   }
 }
 
-void rotacao() {
-  while (f < 20) {
-    l = left.read(), r = right.read() , f = front.read();
-    esquerda2(70, 70);
-  }
-  para2();
-}
 
 void verificaCantos() {
   if (l < 15 && r < 15) {
@@ -256,11 +257,11 @@ void atras2(int vel, int del) {
 
 void direita2(int vel, int vel2) {
   mt1.frente(vel);
-  mt2.atras(vel);
+  mt2.atras(vel2);
 }
 void esquerda2(int vel, int vel2) {
   mt1.atras(vel);
-  mt2.frente(vel);
+  mt2.frente(vel2);
 }
 
 void frente2(int vel) {
