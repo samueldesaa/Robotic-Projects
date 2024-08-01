@@ -162,6 +162,10 @@ void loop() {
       // }
 
       //Graus
+      //rotacao();
+
+      frente2(100, 500);
+      //verificaCantos();
       rotacao();
 
       //SEGUE PAREDE
@@ -182,9 +186,9 @@ void loop() {
 }
 
 void rotacao() {
-  while (f < 30) {
+  while (f < 20) {
     l = left.read(), r = right.read() , f = front.read();
-    esquerda2(70,70);
+    esquerda2(70, 70);
   }
   para2();
 }
@@ -192,7 +196,7 @@ void rotacao() {
 void verificaCantos() {
   if (l < 15 && r < 15) {
     rotDireita();
-    para2(200);
+    para2(210);
     rotDireita();
   } else if (l < 15) {
     rotDireita();
