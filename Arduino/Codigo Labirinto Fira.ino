@@ -31,7 +31,7 @@ public:
       vel = 255;
     }
     //Se necessário diminuição de velocidade em um dos motores
-    if (p1 == 2) {
+    if (p1 == 3) {
       vel -= vel * diminuicao;
     }
     digitalWrite(m1, LOW);
@@ -62,7 +62,7 @@ public:
       vel = 255;
     }
     //Se necessário diminuição de velocidade em um dos motores
-    if (p1 == 2) {
+    if (p1 == 3) {
       vel -= vel * diminuicao;
     }
     digitalWrite(m1, HIGH);
@@ -152,11 +152,11 @@ int prioridade = 1;
 int esqInicio = 8;
 int dirInicio = 8;
 int botao = 51;
-motor mt1(7, 6, 3);
-motor mt2(4, 5, 2);
-Ultrasonic right(24, 22);
-Ultrasonic left(26, 28);
-Ultrasonic front(32, 30);
+motor mt1(4, 5, 2);
+motor mt2(6, 7, 3);
+Ultrasonic left(24, 22);
+Ultrasonic front(26, 28);
+Ultrasonic right(32, 30);
 
 void setup() {
   //configurando o botão
@@ -212,8 +212,8 @@ void loop() {
 
     //TESTE MOTOR
     // int vel = 200;
-    // mt1.frente(vel);
-    // mt2.frente(vel);
+    // led.white();
+    // frente2(2);
 
     //Frente e PARA
     // frente2(4);
