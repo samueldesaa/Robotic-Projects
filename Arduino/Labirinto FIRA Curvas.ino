@@ -168,26 +168,20 @@ void setup() {
 }
 
 void loop() {
-  led.color(0, 255, 100);
+
   while (true) {
     if (digitalRead(botao) == LOW) {
+      led.white();
+      frente2(2, 2, 800);
       esqInicio = left.read() - 2;
-      dirInicio = right.read() - 2;
+      dirInicio = right.read() - 1;
       for (int i = 0; i < 50; i++) {
         led.randColor();
-        delay(50);
+        delay(30);
       }
       led.off();
       break;
     }
-  }
-  while (true) {
-    frente2(3, 3);
-    while (f > 20) {
-      f = front.read();
-    }
-    para2();
-    break;
   }
   while (true) {
     // put your main code here, to run repeatedly:
@@ -279,62 +273,37 @@ void loop() {
 
 
     //Giro
-    int vlc = 75, vlc2 = 180;
+    int vlc = 70, vlc2 = 185;
     int giros = 0;
     int maior = 0;
 
     //SEGUE PAREDE
     led.off();
-    if (f < 15) {
-      led.green();
-      para2(1000);
-      if (l > 60 && r > 60) {
-        for (int i = 0; i < 100; i++) {
-          led.color(156, 30, 90);
-          delay(100);
-          led.color(50, 100, 240);
-          delay(100);
-        }
-        para2();
-      } else if (r < 15 && l < 15) {
-        rotAtras();
-      } else if (l < 20) {
-        led.color(40, 0, 255);
-        rotDireita();
-        prioridade = 2;
-      } else if (r < 20) {
-        led.color(255, 100, 0);
+    if (f < 18) {
+      led.red();
+      if (l+5 > r) {
         rotEsquerda();
-        prioridade = 1;
       } else {
-        if (l < r) {
-          rotDireita();
-          prioridade = 1;
-        } else {
-          rotEsquerda();
-          prioridade = 2;
-        }
+        rotDireita();
       }
-    } else if (l < esqInicio && prioridade == 1) {
+    } else if (l < esqInicio) {
+      led.blue();
       frente2(vlc2, vlc, 100);
-    } else if (r < dirInicio && prioridade == 1) {
+    } else if (r < dirInicio) {
+      led.color(255, 100, 0);
       frente2(vlc, vlc2, 100);
-    } else if (r < esqInicio && prioridade == 2) {
-      frente2(vlc, vlc2, 100);
-    } else if (l < dirInicio && prioridade == 2) {
-      frente2(vlc2, vlc, 100);
     } else {
-      frente2(100);
+      led.green();
+      frente2(100, 150, 100);
     }
   }
 }
-
 int rot = 600;
 
 void rotDireita() {
   // direita2(2, 2, rot);
   para2(200);
-  atras2(2, 2, 120);
+  atras2(2, 2, 200);
   while (true) {
     direita2(2, 2);
     while (f < r) {
@@ -349,7 +318,7 @@ void rotDireita() {
 void rotEsquerda() {
   // esquerda2(2, 2, rot);
   para2(200);
-  atras2(2, 2, 120);
+  atras2(2, 2, 200);
   while (true) {
     esquerda2(2, 2);
     while (f < l) {
@@ -364,7 +333,7 @@ void rotEsquerda() {
 
 void rotAtras() {
   para2(200);
-  atras2(2, 2, 120);
+  atras2(2, 2, 200);
   while (true) {
     direita2(2, 2);
     while (f < 30) {
@@ -429,7 +398,7 @@ void esquerda2(int vel, int vel2) {
 void frente2(int vel) {
   mt2.frente(vel);
   mt1.frente(vel);
-}
+};
 void para2(int del) {
   mt1.para();
   mt2.para();
