@@ -142,21 +142,30 @@ void loop() {
   if (f < 5) {
     if (l < 20 && r < 20) {
       while (f < 30) {
-        f=front.read();
+        f = front.read();
         direita2(150, 150, 50);
         para2(100);
       }
+      direita2(150, 150, 100);
+      frente2(150, 300);
     } else {
-      direita2(150, 150, 300);
-      para2(200);
+      while (f < 25) {
+        f = front.read();
+        esquerda2(150, 150, 50);
+        para2(100);
+      }
+      esquerda2(150, 150, 100);
+      frente2(150, 300);
     }
   } else if (l < esqInicio) {
+    para2(100);
     direita2(150, 150, 100);
-  } else if (l > esqInicio + 10) {
-    frente2(150, 150);
-    esquerda2(150, 150, 300);
-    frente2(150, 150);
-  } else {
+    frente2(150, 200);
+  } 
+  else if (l > esqInicio + 10) {
+    frente2(150, 500);
+  } 
+  else {
     frente2(120, 160, 150);
   }
   para2();
