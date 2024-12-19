@@ -96,80 +96,235 @@ Ultrasonic front(2, 3);
 void setup() {
   //Iniciar monitor serial
   Serial.begin(9600);  // Serve para limpar a tela do display
-  frente2(150, 300);
-  para2(500);
-  esqInicio = left.read() - 1;
-  dirInicio = right.read() - 1;
 }
 
 void loop() {
+  esqInicio = left.read() - 1;
+  dirInicio = right.read() - 1;
+  frente2(150, 300);
+  para2(500);
 
-  // put your main code here, to run repeatedly:
-  //Teste velocidade
-  // frente2(100);
+  while (true) {
+    // put your main code here, to run repeatedly:
+    //Teste velocidade
+    // frente2(100);
 
-  l = left.read();
-  f = front.read();
-  r = right.read();
-  // para2(1000);
+    l = left.read();
+    f = front.read();
+    r = right.read();
+    // para2(1000);
 
-  //Cores
-  // led.color(255,140,0);
-  // while(digitalRead(botao)!=LOW);
-  // led.off();
-  // break;
+    //Cores
+    // led.color(255,140,0);
+    // while(digitalRead(botao)!=LOW);
+    // led.off();
+    // break;
 
-  //IMPRIMIR ENTRADAS ULTRASONICO
-  Serial.print(l);
-  if (l < 100) {
-    Serial.print(" ");
-  };
-  if (l < 10) {
-    Serial.print(" ");
-  };
-  Serial.print(",");
-  Serial.print(f);
-  if (f < 100) {
-    Serial.print(" ");
-  };
-  if (f < 10) {
-    Serial.print(" ");
-  };
-  Serial.print(",");
-  Serial.print(r);
-  Serial.println();
+    //IMPRIMIR ENTRADAS ULTRASONICO
+    Serial.print(l);
+    if (l < 100) {
+      Serial.print(" ");
+    };
+    if (l < 10) {
+      Serial.print(" ");
+    };
+    Serial.print(",");
+    Serial.print(f);
+    if (f < 100) {
+      Serial.print(" ");
+    };
+    if (f < 10) {
+      Serial.print(" ");
+    };
+    Serial.print(",");
+    Serial.print(r);
+    Serial.println();
 
-  if (f < 5) {
-    if (l < 20 && r < 20) {
-      while (f < 30) {
-        f = front.read();
-        direita2(150, 150, 50);
-        para2(100);
+    // frente2(150);
+
+    // lcd.clear();
+    // lcd.setCursor(1, 0);
+
+    //SEGUE ESQUERDA
+    if (f < esqInicio) {
+      if (l < 20 && r < 20) {
+        direita2(150, 150, 300);
+        para2(200);
+        direita2(150, 150, 300);
+        atras2(150,100);
+        para2(200);
+      } else{
+        direita2(150, 150, 300);
+        para2(200);
       }
+    } else if (l < esqInicio) {
       direita2(150, 150, 100);
-      frente2(150, 300);
+    } else if (l > esqInicio + 10) {
+      frente2(150, 150);
+      esquerda2(150, 150, 300);
+      frente2(150, 150);
     } else {
-      while (f < 25) {
-        f = front.read();
-        esquerda2(150, 150, 50);
-        para2(100);
-      }
-      esquerda2(150, 150, 100);
-      frente2(150, 300);
+      frente2(120, 160, 150);
     }
-  } else if (l < esqInicio) {
-    para2(100);
-    direita2(150, 150, 100);
-    frente2(150, 200);
-  } 
-  else if (l > esqInicio + 10) {
-    frente2(150, 500);
-  } 
-  else {
-    frente2(120, 160, 150);
+    para2();
+    delay(200);
+    // if (f < 5) {
+    //   lcd.clear();
+    //   lcd.setCursor(1,0);
+    //   lcd.print("Girando");
+    //   lcd.setCursor(1,1);
+    //   lcd.print(f);
+    //   atras()
+    //   esquerda2(150,150,400);
+    // }else if(l>esqInicio){
+    //   lcd.clear();
+    //   lcd.setCursor(1,0);
+    //   lcd.print("Alinhando");
+    //   lcd.setCursor(1,1);
+    //   lcd.print("Esq: ");
+    //   lcd.print(l);
+    //   lcd.print("Ini: ");
+    //   lcd.print(esqInicio);
+    //   para2();
+    //   delay(100);
+    //   esquerda2(150,150,50);
+    //   delay(100);
+    //   frente2(150,300);
+    // } else {
+    //   lcd.clear();
+    //   lcd.setCursor(1,0);
+    //   lcd.print("Frente");
+    //   lcd.setCursor(1,1);
+    //   lcd.print("Esq: ");
+    //   lcd.print(l);
+    //   lcd.print("Ini: ");
+    //   lcd.print(esqInicio);
+    //   frente2(150,130,300);
+    // }
+
+    // int vlc = 100, vlc2 = 185;
+    // int giros = 0;
+    // int maior = 0;
+
+    //SEGUE PAREDE
+
+
+    //SEGUE PAREDE
+    // if (f < 18) {
+    //   if (l+5 > r) {
+    //     rotEsquerda();
+    //   } else {
+    //     rotDireita();
+    //   }
+    // } else if (l < esqInicio) {
+    //   frente2(vlc2, vlc, 100);
+    // } else if (r < dirInicio) {
+    //   frente2(vlc, vlc2, 100);
+    // } else {
+    //   frente2(100, 150, 100);
+    // }
+
+    //TESTE LED
+    // led.blue();
+    // delay(200);
+
+    //TESTE MOTOR
+    // int vel = 200;
+    // led.white();
+    // frente2(2);
+
+    //Frente e PARA
+    // frente2(4);u
+    // while (true) {
+    //   f = front.read();\
+    //   if (f < 20 || digitalRead(botao) == LOW) {
+    //     direita2(2, 2, 600);
+    //     break;
+    //   }
+    // }
+    // break;
+
+    //GIRO
+    // delay(5000);
+    // int velo = 150;
+    // direita2(velo,velo,500);
+
+    // if(f<15){
+    //   atras2(150,100);
+    //   direita2(150,150,200);
+    // }
+    // else if(l<esqInicio){
+    //   direita2(150,150,50);
+    // }else{
+    //   frente2(200,150,100);
+    // }
+
+    //PARA NA PAREDE E DÁ MEIA VOLTA
+    // if( f > 20){
+    //   frente2(2);
+    //   while(f>20){
+    //     f = front.read();
+    //   }
+    // }else{
+    //   para2();
+    //   rotDireita();
+    // }
+
+    //Graus
+    //rotacao();
+
+    //verificaCantos();
+
+    //Giro
+    //  int x = left.read();
+    //  esquerda2(2, 2);
+    //  while (f < x+5) {
+    //    f = front.read();
+    //  }
+    //  esquerda2(2,2,200);
+    //  para2();
+    //  break;
+
+
+    //TABELA
+    //VERMELHO: SÓ VIU A FRENTE E NAO LADOS
+    //VERDE: VIU PAREDE
+    //AZUL:
+    //AMARELO(255,200,0):
+    //LARANJA(255,100,0):
+    //AZUL BEBE(0,255,255):
+    //CIANO(0,255,100):
+    //LILAS(255,0,255):
+    //ROXO(100,0,255):
+    //ROSA(255,0,100):
+    //BRANCO:
+
+
+    //Giro
+    // int vlc = 70, vlc2 = 185;
+    // int giros = 0;
+    // int maior = 0;
+
+    // //SEGUE PAREDE
+    // led.off();
+    // if (f < 18) {
+    //   led.red();
+    //   if (l + 5 > r) {
+    //     rotEsquerda();
+    //   } else {
+    //     rotDireita();
+    //   }
+    // } else if (l < esqInicio) {
+    //   led.blue();
+    //   frente2(vlc2, vlc, 100);
+    // } else if (r < dirInicio) {
+    //   led.color(255, 100, 0);
+    //   frente2(vlc, vlc2, 100);
+    // } else {
+    //   led.green();
+    //   frente2(100, 150, 100);
+    // }
   }
-  para2();
-  delay(50);
 }
 
 void direita2(int vel, int vel2, int del) {
